@@ -47,6 +47,8 @@
 			this.label7 = new System.Windows.Forms.Label();
 			this.progCurrentFile = new System.Windows.Forms.ProgressBar();
 			this.rtfMessages = new Metacraft.FlightSimulation.WoaiDownloader.EnhancedRichTextBox();
+			this.ddlSim = new System.Windows.Forms.ComboBox();
+			this.label8 = new System.Windows.Forms.Label();
 			this.grpConfiguration.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -86,6 +88,8 @@
 			// 
 			this.grpConfiguration.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpConfiguration.Controls.Add(this.label8);
+			this.grpConfiguration.Controls.Add(this.ddlSim);
 			this.grpConfiguration.Controls.Add(this.btnBrowseDownloadFolder);
 			this.grpConfiguration.Controls.Add(this.txtDownloadFolder);
 			this.grpConfiguration.Controls.Add(this.label3);
@@ -106,7 +110,7 @@
 			this.btnBrowseDownloadFolder.Location = new System.Drawing.Point(793, 32);
 			this.btnBrowseDownloadFolder.Name = "btnBrowseDownloadFolder";
 			this.btnBrowseDownloadFolder.Size = new System.Drawing.Size(55, 20);
-			this.btnBrowseDownloadFolder.TabIndex = 6;
+			this.btnBrowseDownloadFolder.TabIndex = 8;
 			this.btnBrowseDownloadFolder.Text = "Browse";
 			this.btnBrowseDownloadFolder.UseVisualStyleBackColor = true;
 			this.btnBrowseDownloadFolder.Click += new System.EventHandler(this.btnBrowseDownloadFolder_Click);
@@ -115,20 +119,20 @@
 			// 
 			this.txtDownloadFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtDownloadFolder.Location = new System.Drawing.Point(225, 32);
+			this.txtDownloadFolder.Location = new System.Drawing.Point(279, 32);
 			this.txtDownloadFolder.Name = "txtDownloadFolder";
 			this.txtDownloadFolder.ReadOnly = true;
-			this.txtDownloadFolder.Size = new System.Drawing.Size(562, 20);
-			this.txtDownloadFolder.TabIndex = 5;
+			this.txtDownloadFolder.Size = new System.Drawing.Size(508, 20);
+			this.txtDownloadFolder.TabIndex = 7;
 			// 
 			// label3
 			// 
 			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.label3.Location = new System.Drawing.Point(225, 16);
+			this.label3.Location = new System.Drawing.Point(279, 16);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(562, 13);
-			this.label3.TabIndex = 4;
+			this.label3.Size = new System.Drawing.Size(508, 13);
+			this.label3.TabIndex = 6;
 			this.label3.Text = "Download Folder:";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
@@ -182,9 +186,9 @@
 			// 
 			this.btnDownloadPackages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnDownloadPackages.Location = new System.Drawing.Point(280, 556);
+			this.btnDownloadPackages.Location = new System.Drawing.Point(279, 556);
 			this.btnDownloadPackages.Name = "btnDownloadPackages";
-			this.btnDownloadPackages.Size = new System.Drawing.Size(591, 23);
+			this.btnDownloadPackages.Size = new System.Drawing.Size(592, 23);
 			this.btnDownloadPackages.TabIndex = 10;
 			this.btnDownloadPackages.Text = "Download Selected Packages";
 			this.btnDownloadPackages.UseVisualStyleBackColor = true;
@@ -253,6 +257,24 @@
 			this.rtfMessages.TabIndex = 5;
 			this.rtfMessages.Text = "";
 			// 
+			// ddlSim
+			// 
+			this.ddlSim.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.ddlSim.FormattingEnabled = true;
+			this.ddlSim.Location = new System.Drawing.Point(225, 31);
+			this.ddlSim.Name = "ddlSim";
+			this.ddlSim.Size = new System.Drawing.Size(48, 21);
+			this.ddlSim.TabIndex = 5;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(225, 16);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(48, 13);
+			this.label8.TabIndex = 4;
+			this.label8.Text = "Sim:";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -303,6 +325,8 @@
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.ProgressBar progCurrentFile;
 		private EnhancedRichTextBox rtfMessages;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.ComboBox ddlSim;
 	}
 }
 

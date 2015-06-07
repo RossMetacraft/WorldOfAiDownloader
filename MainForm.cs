@@ -43,6 +43,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			mPackageDownloadClient.UploadValuesCompleted += mPackageDownloadClient_UploadValuesCompleted;
 			mPackageDownloadClient.DownloadStringCompleted += mPackageDownloadClient_DownloadStringCompleted;
 			mPackageDownloadClient.DownloadFileCompleted += mPackageDownloadClient_DownloadFileCompleted;
+			ddlSim.Items.Add("FS9");
+			ddlSim.Items.Add("FSX");
+			ddlSim.SelectedItem = "FSX";
 			SetControlStates();
 		}
 
@@ -52,6 +55,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				progCurrentFile.Style = ProgressBarStyle.Marquee;
 				btnDownloadPackages.Text = "Cancel Download";
 				btnDownloadPackages.Enabled = true;
+				grpConfiguration.Enabled = false;
+				treePackages.Enabled = false;
+				btnRefreshPackageList.Enabled = false;
 			} else {
 				progCurrentFile.Style = ProgressBarStyle.Continuous;
 				btnDownloadPackages.Text = "Download Selected Packages";
@@ -59,6 +65,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 					!string.IsNullOrEmpty(txtAvsimUsername.Text)
 					&& !string.IsNullOrEmpty(txtAvsimPassword.Text)
 					&& (GetCheckedNodes(treePackages.Nodes).Count > 0);
+				grpConfiguration.Enabled = true;
+				treePackages.Enabled = true;
+				btnRefreshPackageList.Enabled = true;
 			}
 		}
 
@@ -142,9 +151,11 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 					if (string.IsNullOrEmpty(pi.Country)) pi.Country = "N/A";
 					HtmlNodeCollection links = cells[5].SelectNodes("a");
 					if (links.Count == 2) {
-						pi.AvsimUrl = links[0].Attributes["href"].Value;
+						pi.AvsimUrlFs9 = links[0].Attributes["href"].Value;
+						pi.AvsimUrlFsx = pi.AvsimUrlFs9;
 					} else {
-						pi.AvsimUrl = links[2].Attributes["href"].Value;
+						pi.AvsimUrlFs9 = links[0].Attributes["href"].Value;
+						pi.AvsimUrlFsx = links[2].Attributes["href"].Value;
 					}
 					if (!mPackages[packageGroup.Name].ContainsKey(pi.Country)) mPackages[packageGroup.Name].Add(pi.Country, new List<PackageInfo>());
 					mPackages[packageGroup.Name][pi.Country].Add(pi);
@@ -305,7 +316,8 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				return;
 			}
 			AddMessage(string.Format("Fetching download link for {0} ...", mSelectedPackages[mCurrentPackageIndex].Name));
-			mPackageDownloadClient.DownloadStringAsync(new Uri(mSelectedPackages[mCurrentPackageIndex].AvsimUrl));
+			string downloadUri = (ddlSim.SelectedText == "FSX") ? mSelectedPackages[mCurrentPackageIndex].AvsimUrlFsx : mSelectedPackages[mCurrentPackageIndex].AvsimUrlFs9;
+			mPackageDownloadClient.DownloadStringAsync(new Uri(downloadUri));
 		}
 
 		void mPackageDownloadClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
