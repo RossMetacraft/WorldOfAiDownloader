@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using HtmlAgilityPack;
@@ -119,7 +120,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 		{
 			if (e.Cancelled) return;
 			if (e.Error != null) {
-				MessageBox.Show(this, string.Format("Error loading package list from WoAI web site: {0}", e.Error.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format("Error loading package list from WoAI web site: {0}{1}{2}{3}", e.Error.Message, Environment.NewLine, Environment.NewLine, e.Error.InnerException != null ? e.Error.InnerException.Message : ""), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				AddErrorMessage(" error." + Environment.NewLine);
 				return;
 			}
@@ -251,8 +252,25 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			}
 		}
 
+		private bool hasWriteAccessToFolder(string folderPath)
+		{
+			try {
+				// Attempt to get a list of security permissions from the folder. 
+				// This will raise an exception if the path is read only or do not have access to view the permissions. 
+				System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(folderPath);
+				return true;
+			}
+			catch (UnauthorizedAccessException) {
+				return false;
+			}
+		}
+
 		private void StartDownload()
 		{
+			if (!hasWriteAccessToFolder(txtDownloadFolder.Text)) {
+				MessageBox.Show(this, "You do not appear to have write access to the specified download folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+				return;
+			}
 			mDownloadInProgress = true;
 			SetControlStates();
 			mSelectedPackages = GetCheckedNodes(treePackages.Nodes).Where(x => x.Tag != null).Select(x => x.Tag as PackageInfo).ToList();
@@ -286,7 +304,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			if (e.Error != null) {
 				AddErrorMessage(" error." + Environment.NewLine);
 				StopDownload();
-				MessageBox.Show(this, string.Format("Error logging into AVSIM: {0}", e.Error.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format("Error logging into AVSIM: {0}{1}{2}{3}", e.Error.Message, Environment.NewLine, Environment.NewLine, e.Error.InnerException != null ? e.Error.InnerException.Message : ""), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			CookieCollection cookies = mPackageDownloadClient.CookieContainer.GetCookies(new Uri(AVSIM_LOGIN_URL));
@@ -326,7 +344,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			if (e.Error != null) {
 				AddErrorMessage(" error." + Environment.NewLine);
 				StopDownload();
-				MessageBox.Show(this, string.Format("Error fetching download link or FTP URL: {0}", e.Error.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format("Error fetching download link or FTP URL: {0}{1}{2}{3}", e.Error.Message, Environment.NewLine, Environment.NewLine, e.Error.InnerException != null ? e.Error.InnerException.Message : ""), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			string redirectUrl = mPackageDownloadClient.ResponseHeaders[HttpResponseHeader.Location];
@@ -363,7 +381,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			if (e.Error != null) {
 				AddErrorMessage(" error." + Environment.NewLine);
 				StopDownload();
-				MessageBox.Show(this, string.Format("Error downloading package: {0}", e.Error.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format("Error downloading package: {0}{1}{2}{3}", e.Error.Message, Environment.NewLine, Environment.NewLine, e.Error.InnerException != null ? e.Error.InnerException.Message : ""), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			AddMessage(" done." + Environment.NewLine);
