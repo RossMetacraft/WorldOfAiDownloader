@@ -36,7 +36,6 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 		public MainForm()
 		{
 			InitializeComponent();
-			txtDownloadFolder.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			mPackageListClient = new WebClient();
 			mPackageListClient.DownloadProgressChanged += mPackageListClient_DownloadProgressChanged;
 			mPackageListClient.DownloadStringCompleted += mPackageListClient_DownloadStringCompleted;
@@ -46,7 +45,12 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			mPackageDownloadClient.DownloadFileCompleted += mPackageDownloadClient_DownloadFileCompleted;
 			ddlSim.Items.Add("FS9");
 			ddlSim.Items.Add("FSX");
-			ddlSim.SelectedItem = "FSX";
+			Config cfg = Config.Load();
+			txtAvsimUsername.Text = cfg.AvsimUsername;
+			txtAvsimPassword.Text = cfg.AvsimPassword;
+			chkSavePassword.Checked = cfg.SavePassword;
+			ddlSim.SelectedItem = cfg.Simulator;
+			txtDownloadFolder.Text = cfg.DownloadFolder;
 			SetControlStates();
 		}
 
@@ -234,6 +238,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			SaveConfig();
 			if (mPackageListClient != null) mPackageListClient.Dispose();
 			if (mPackageDownloadClient != null) mPackageDownloadClient.Dispose();
 		}
@@ -409,6 +414,18 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			rtfMessages.SelectedText = message;
 			rtfMessages.SelectionStart = rtfMessages.TextLength;
 			if (scrolledToBottom) rtfMessages.ScrollToCaret();
+		}
+
+		private void SaveConfig()
+		{
+			Config cfg = new Config() {
+				AvsimUsername = txtAvsimUsername.Text,
+				AvsimPassword = chkSavePassword.Checked ? txtAvsimPassword.Text : string.Empty,
+				SavePassword = chkSavePassword.Checked,
+				Simulator = ddlSim.SelectedItem.ToString(),
+				DownloadFolder = txtDownloadFolder.Text
+			};
+			cfg.Save();
 		}
 	}
 }

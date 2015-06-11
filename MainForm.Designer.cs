@@ -32,6 +32,8 @@
 			this.treePackages = new System.Windows.Forms.TreeView();
 			this.txtAvsimUsername = new System.Windows.Forms.TextBox();
 			this.grpConfiguration = new System.Windows.Forms.GroupBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.ddlSim = new System.Windows.Forms.ComboBox();
 			this.btnBrowseDownloadFolder = new System.Windows.Forms.Button();
 			this.txtDownloadFolder = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
@@ -46,9 +48,8 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.progCurrentFile = new System.Windows.Forms.ProgressBar();
+			this.chkSavePassword = new System.Windows.Forms.CheckBox();
 			this.rtfMessages = new Metacraft.FlightSimulation.WoaiDownloader.EnhancedRichTextBox();
-			this.ddlSim = new System.Windows.Forms.ComboBox();
-			this.label8 = new System.Windows.Forms.Label();
 			this.grpConfiguration.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -88,6 +89,7 @@
 			// 
 			this.grpConfiguration.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpConfiguration.Controls.Add(this.chkSavePassword);
 			this.grpConfiguration.Controls.Add(this.label8);
 			this.grpConfiguration.Controls.Add(this.ddlSim);
 			this.grpConfiguration.Controls.Add(this.btnBrowseDownloadFolder);
@@ -104,13 +106,31 @@
 			this.grpConfiguration.TabStop = false;
 			this.grpConfiguration.Text = "Configuration";
 			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(330, 16);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(48, 13);
+			this.label8.TabIndex = 5;
+			this.label8.Text = "Sim:";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// ddlSim
+			// 
+			this.ddlSim.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.ddlSim.FormattingEnabled = true;
+			this.ddlSim.Location = new System.Drawing.Point(330, 31);
+			this.ddlSim.Name = "ddlSim";
+			this.ddlSim.Size = new System.Drawing.Size(48, 21);
+			this.ddlSim.TabIndex = 6;
+			// 
 			// btnBrowseDownloadFolder
 			// 
 			this.btnBrowseDownloadFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnBrowseDownloadFolder.Location = new System.Drawing.Point(793, 32);
 			this.btnBrowseDownloadFolder.Name = "btnBrowseDownloadFolder";
 			this.btnBrowseDownloadFolder.Size = new System.Drawing.Size(55, 20);
-			this.btnBrowseDownloadFolder.TabIndex = 8;
+			this.btnBrowseDownloadFolder.TabIndex = 9;
 			this.btnBrowseDownloadFolder.Text = "Browse";
 			this.btnBrowseDownloadFolder.UseVisualStyleBackColor = true;
 			this.btnBrowseDownloadFolder.Click += new System.EventHandler(this.btnBrowseDownloadFolder_Click);
@@ -119,20 +139,20 @@
 			// 
 			this.txtDownloadFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtDownloadFolder.Location = new System.Drawing.Point(279, 32);
+			this.txtDownloadFolder.Location = new System.Drawing.Point(384, 32);
 			this.txtDownloadFolder.Name = "txtDownloadFolder";
 			this.txtDownloadFolder.ReadOnly = true;
-			this.txtDownloadFolder.Size = new System.Drawing.Size(508, 20);
-			this.txtDownloadFolder.TabIndex = 7;
+			this.txtDownloadFolder.Size = new System.Drawing.Size(403, 20);
+			this.txtDownloadFolder.TabIndex = 8;
 			// 
 			// label3
 			// 
 			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.label3.Location = new System.Drawing.Point(279, 16);
+			this.label3.Location = new System.Drawing.Point(384, 16);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(508, 13);
-			this.label3.TabIndex = 6;
+			this.label3.Size = new System.Drawing.Size(403, 13);
+			this.label3.TabIndex = 7;
 			this.label3.Text = "Download Folder:";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
@@ -246,6 +266,16 @@
 			this.progCurrentFile.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this.progCurrentFile.TabIndex = 7;
 			// 
+			// chkSavePassword
+			// 
+			this.chkSavePassword.AutoSize = true;
+			this.chkSavePassword.Location = new System.Drawing.Point(225, 34);
+			this.chkSavePassword.Name = "chkSavePassword";
+			this.chkSavePassword.Size = new System.Drawing.Size(99, 17);
+			this.chkSavePassword.TabIndex = 4;
+			this.chkSavePassword.Text = "Save password";
+			this.chkSavePassword.UseVisualStyleBackColor = true;
+			// 
 			// rtfMessages
 			// 
 			this.rtfMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -256,24 +286,6 @@
 			this.rtfMessages.Size = new System.Drawing.Size(591, 391);
 			this.rtfMessages.TabIndex = 5;
 			this.rtfMessages.Text = "";
-			// 
-			// ddlSim
-			// 
-			this.ddlSim.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.ddlSim.FormattingEnabled = true;
-			this.ddlSim.Location = new System.Drawing.Point(225, 31);
-			this.ddlSim.Name = "ddlSim";
-			this.ddlSim.Size = new System.Drawing.Size(48, 21);
-			this.ddlSim.TabIndex = 5;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(225, 16);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(48, 13);
-			this.label8.TabIndex = 4;
-			this.label8.Text = "Sim:";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// MainForm
 			// 
@@ -327,6 +339,7 @@
 		private EnhancedRichTextBox rtfMessages;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.ComboBox ddlSim;
+		private System.Windows.Forms.CheckBox chkSavePassword;
 	}
 }
 
