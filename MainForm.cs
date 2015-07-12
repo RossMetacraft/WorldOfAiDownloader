@@ -376,20 +376,39 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				AddMessage("Downloading file ...");
 				Uri ftpUri = new Uri(redirectUrl);
 				string filename = ftpUri.Segments.Last();
-				mPackageDownloadClient.DownloadFileAsync(ftpUri, Path.Combine(txtDownloadFolder.Text, filename));
+                if (!File.Exists(Path.Combine(txtDownloadFolder.Text, filename)))
+                {
+                    mPackageDownloadClient.DownloadFileAsync(ftpUri, Path.Combine(txtDownloadFolder.Text, filename));
+                }
+                else
+                {
+                    //Skip over files that already exist.
+                    AddMessage(" skipped. File already exists." + Environment.NewLine);
+                    progOverall.Value = mCurrentPackageIndex + 1;
+                    DownloadNextPackage();
+                }
 			}
 		}
 
 		void mPackageDownloadClient_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
 		{
 			if (e.Cancelled) return;
-			if (e.Error != null) {
-				AddErrorMessage(" error." + Environment.NewLine);
-				StopDownload();
-				MessageBox.Show(this, string.Format("Error downloading package: {0}{1}{2}{3}", e.Error.Message, Environment.NewLine, Environment.NewLine, e.Error.InnerException != null ? e.Error.InnerException.Message : ""), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
-			}
-			AddMessage(" done." + Environment.NewLine);
+            if (e.Error != null)
+            {
+                AddErrorMessage(" error." + Environment.NewLine);
+                //StopDownload(); //Don't stop the download, just ignore this file
+                AddErrorMessage(
+                    string.Format(
+                    "Error downloading package: {0}{1}{2}{3}",
+                    e.Error.Message,
+                    Environment.NewLine,
+                    e.Error.InnerException != null ? e.Error.InnerException.Message : "",
+                    Environment.NewLine));
+            }
+            else
+            {
+                AddMessage(" done." + Environment.NewLine);
+            }
 			progOverall.Value = mCurrentPackageIndex + 1;
 			DownloadNextPackage();
 		}
@@ -413,7 +432,8 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			rtfMessages.SelectionColor = color;
 			rtfMessages.SelectedText = message;
 			rtfMessages.SelectionStart = rtfMessages.TextLength;
-			if (scrolledToBottom) rtfMessages.ScrollToCaret();
+            //if (scrolledToBottom) rtfMessages.ScrollToCaret();
+            rtfMessages.ScrollToCaret(); //Bit more clunky but line above wasn't working. scrolledToBottom was always false
 		}
 
 		private void SaveConfig()
