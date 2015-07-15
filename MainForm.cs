@@ -350,7 +350,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				return;
 			}
 			AddMessage(string.Format("Fetching download link for {0} ...", mSelectedPackages[mCurrentPackageIndex].Name));
-			string downloadUri = (ddlSim.SelectedText == "FSX") ? mSelectedPackages[mCurrentPackageIndex].AvsimUrlFsx : mSelectedPackages[mCurrentPackageIndex].AvsimUrlFs9;
+			string downloadUri = ((string)ddlSim.SelectedItem == "FSX") ? mSelectedPackages[mCurrentPackageIndex].AvsimUrlFsx : mSelectedPackages[mCurrentPackageIndex].AvsimUrlFs9;
 			mPackageDownloadClient.DownloadStringAsync(new Uri(downloadUri));
 		}
 
