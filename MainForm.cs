@@ -155,13 +155,24 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 					};
 					if (string.IsNullOrEmpty(pi.Country)) pi.Country = "N/A";
 					HtmlNodeCollection links = cells[5].SelectNodes("a");
-					if (links.Count == 2) {
-						pi.AvsimUrlFs9 = links[0].Attributes["href"].Value;
+                    List<HtmlAgilityPack.HtmlNode> avsimLinks = new List<HtmlAgilityPack.HtmlNode>();
+
+                    foreach (HtmlAgilityPack.HtmlNode link in links) {
+                        if (link.InnerText.ToLower().Trim() == "avsim") {
+                            avsimLinks.Add(link);
+                        }
+                    }
+
+                    if (avsimLinks.Count == 1) {
+                        pi.AvsimUrlFs9 = avsimLinks[0].Attributes["href"].Value;
 						pi.AvsimUrlFsx = pi.AvsimUrlFs9;
-					} else {
-						pi.AvsimUrlFs9 = links[0].Attributes["href"].Value;
-						pi.AvsimUrlFsx = links[2].Attributes["href"].Value;
-					}
+					} else if (avsimLinks.Count == 2) {
+                        pi.AvsimUrlFs9 = avsimLinks[0].Attributes["href"].Value;
+                        pi.AvsimUrlFsx = avsimLinks[1].Attributes["href"].Value;
+                    }
+                    else {
+                        MessageBox.Show(this, "Error finding AVSIM links for package: \"" + pi.Name + "\"", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
 					if (!mPackages[packageGroup.Name].ContainsKey(pi.Country)) mPackages[packageGroup.Name].Add(pi.Country, new List<PackageInfo>());
 					mPackages[packageGroup.Name][pi.Country].Add(pi);
 				}
@@ -339,7 +350,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				return;
 			}
 			AddMessage(string.Format("Fetching download link for {0} ...", mSelectedPackages[mCurrentPackageIndex].Name));
-			string downloadUri = (ddlSim.SelectedText == "FSX") ? mSelectedPackages[mCurrentPackageIndex].AvsimUrlFsx : mSelectedPackages[mCurrentPackageIndex].AvsimUrlFs9;
+			string downloadUri = ((string)ddlSim.SelectedItem == "FSX") ? mSelectedPackages[mCurrentPackageIndex].AvsimUrlFsx : mSelectedPackages[mCurrentPackageIndex].AvsimUrlFs9;
 			mPackageDownloadClient.DownloadStringAsync(new Uri(downloadUri));
 		}
 
