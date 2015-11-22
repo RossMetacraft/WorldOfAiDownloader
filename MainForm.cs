@@ -370,13 +370,8 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 					return;
 				}
 				string downloadUrl = string.Format(AVSIM_DOWNLOAD_URL_FORMAT, match.Groups[1].Value);
-				AddMessage("Fetching FTP URL ...");
-				mPackageDownloadClient.DownloadStringAsync(new Uri(downloadUrl));
-			} else {
 				AddMessage("Downloading file ...");
-				Uri ftpUri = new Uri(redirectUrl);
-				string filename = ftpUri.Segments.Last();
-				mPackageDownloadClient.DownloadFileAsync(ftpUri, Path.Combine(txtDownloadFolder.Text, filename));
+				mPackageDownloadClient.DownloadFileAsync(new Uri(downloadUrl), Path.Combine(txtDownloadFolder.Text, filename));
 			}
 		}
 
