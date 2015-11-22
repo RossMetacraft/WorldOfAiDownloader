@@ -42,7 +42,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			mPackageDownloadClient = new CookieAwareWebClient();
 			mPackageDownloadClient.UploadValuesCompleted += mPackageDownloadClient_UploadValuesCompleted;
 			mPackageDownloadClient.DownloadStringCompleted += mPackageDownloadClient_DownloadStringCompleted;
-			mPackageDownloadClient.DownloadFileCompleted += mPackageDownloadClient_DownloadFileCompleted;
+			mPackageDownloadClient.DownloadDataCompleted += mPackageDownloadClient_DownloadDataCompleted;
 			ddlSim.Items.Add("FS9");
 			ddlSim.Items.Add("FSX");
 			Config cfg = Config.Load();
@@ -371,17 +371,33 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				}
 				string downloadUrl = string.Format(AVSIM_DOWNLOAD_URL_FORMAT, match.Groups[1].Value);
 				AddMessage("Downloading file ...");
-				mPackageDownloadClient.DownloadFileAsync(new Uri(downloadUrl), Path.Combine(txtDownloadFolder.Text, filename));
+				mPackageDownloadClient.DownloadDataAsync(new Uri(downloadUrl));
 			}
 		}
 
-		void mPackageDownloadClient_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
-		{
+		void mPackageDownloadClient_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e) {
 			if (e.Cancelled) return;
 			if (e.Error != null) {
 				AddErrorMessage(" error." + Environment.NewLine);
 				StopDownload();
 				MessageBox.Show(this, string.Format("Error downloading package: {0}{1}{2}{3}", e.Error.Message, Environment.NewLine, Environment.NewLine, e.Error.InnerException != null ? e.Error.InnerException.Message : ""), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+			string filenameHeader = mPackageDownloadClient.ResponseHeaders["Content-Disposition"] ?? string.Empty;
+			Match match = Regex.Match(filenameHeader, "filename=\"(.+?)\"", RegexOptions.IgnoreCase);
+			if (!match.Success) {
+				AddErrorMessage(" filename not found in response headers." + Environment.NewLine);
+				DownloadNextPackage();
+				return;
+			}
+			string filename = Path.Combine(txtDownloadFolder.Text, match.Groups[1].Value);
+			try {
+				File.WriteAllBytes(filename, e.Result);
+			}
+			catch (Exception ex) {
+				AddErrorMessage(" error." + Environment.NewLine);
+				StopDownload();
+				MessageBox.Show(this, string.Format("Error saving downloaded package: {0}{1}{2}{3}", ex.Message, Environment.NewLine, Environment.NewLine, ex.InnerException != null ? ex.InnerException.Message : ""), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			AddMessage(" done." + Environment.NewLine);
