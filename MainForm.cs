@@ -16,8 +16,8 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 	{
 		private const string LOCAL_PACKAGE_LIST_FILE = "packages.html";
 		private const string WORLD_OF_AI_PACKAGE_LIST_URL = "http://www.world-of-ai.com/allpackages.php";
-		private const string AVSIM_LOGIN_URL = "http://library.avsim.net/dologin.php";
-		private const string AVSIM_DOWNLOAD_URL_FORMAT = "http://library.avsim.net/sendfile.php?Location=AVSIM&Proto=ftp&DLID={0}";
+		private const string AVSIM_LOGIN_URL = "https://library.avsim.net/dologin.php";
+		private const string AVSIM_DOWNLOAD_URL_FORMAT = "https://library.avsim.net/sendfile.php?Location=AVSIM&Proto=ftp&DLID={0}";
 
 		private List<PackageGroup> mPackageGroups = new List<PackageGroup>() {
 			new PackageGroup("airlines", "Passenger Airlines"),
@@ -354,25 +354,30 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			}
 			string redirectUrl = mPackageDownloadClient.ResponseHeaders[HttpResponseHeader.Location];
 			AddMessage(" done." + Environment.NewLine);
-			if (string.IsNullOrEmpty(redirectUrl)) {
-				HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-				doc.LoadHtml(e.Result);
-				HtmlNode link = doc.DocumentNode.SelectSingleNode("//a[contains(@href,'download.php')]");
-				if (link == null) {
-					AddErrorMessage("Could not find download link in HTML returned from AVSIM." + Environment.NewLine);
-					DownloadNextPackage();
-					return;
-				}
-				Match match = Regex.Match(link.Attributes["href"].Value, @"DLID=(\d+)", RegexOptions.IgnoreCase);
-				if (!match.Success) {
-					AddErrorMessage("Could not find download link in HTML returned from AVSIM." + Environment.NewLine);
-					DownloadNextPackage();
-					return;
-				}
-				string downloadUrl = string.Format(AVSIM_DOWNLOAD_URL_FORMAT, match.Groups[1].Value);
-				AddMessage("Downloading file ...");
-				mPackageDownloadClient.DownloadDataAsync(new Uri(downloadUrl));
+
+			if (!string.IsNullOrEmpty(redirectUrl)) {
+				AddMessage("Following redirect ...");
+				mPackageDownloadClient.DownloadStringAsync(new Uri(redirectUrl));
+				return;
 			}
+
+			HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+			doc.LoadHtml(e.Result);
+			HtmlNode link = doc.DocumentNode.SelectSingleNode("//a[contains(@href,'download.php')]");
+			if (link == null) {
+				AddErrorMessage("Could not find download link in HTML returned from AVSIM." + Environment.NewLine);
+				DownloadNextPackage();
+				return;
+			}
+			Match match = Regex.Match(link.Attributes["href"].Value, @"DLID=(\d+)", RegexOptions.IgnoreCase);
+			if (!match.Success) {
+				AddErrorMessage("Could not find download link in HTML returned from AVSIM." + Environment.NewLine);
+				DownloadNextPackage();
+				return;
+			}
+			string downloadUrl = string.Format(AVSIM_DOWNLOAD_URL_FORMAT, match.Groups[1].Value);
+			AddMessage("Downloading file ...");
+			mPackageDownloadClient.DownloadDataAsync(new Uri(downloadUrl));
 		}
 
 		void mPackageDownloadClient_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e) {
