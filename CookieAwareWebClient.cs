@@ -19,6 +19,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				(request as HttpWebRequest).CookieContainer = CookieContainer;
 				(request as HttpWebRequest).AllowAutoRedirect = false;
 			}
+
 			return request;
 		}
 	}

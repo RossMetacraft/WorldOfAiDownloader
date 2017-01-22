@@ -32,6 +32,7 @@
 			this.treePackages = new System.Windows.Forms.TreeView();
 			this.txtAvsimUsername = new System.Windows.Forms.TextBox();
 			this.grpConfiguration = new System.Windows.Forms.GroupBox();
+			this.chkSavePassword = new System.Windows.Forms.CheckBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.ddlSim = new System.Windows.Forms.ComboBox();
 			this.btnBrowseDownloadFolder = new System.Windows.Forms.Button();
@@ -48,7 +49,6 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.progCurrentFile = new System.Windows.Forms.ProgressBar();
-			this.chkSavePassword = new System.Windows.Forms.CheckBox();
 			this.rtfMessages = new Metacraft.FlightSimulation.WoaiDownloader.EnhancedRichTextBox();
 			this.grpConfiguration.SuspendLayout();
 			this.SuspendLayout();
@@ -105,6 +105,16 @@
 			this.grpConfiguration.TabIndex = 0;
 			this.grpConfiguration.TabStop = false;
 			this.grpConfiguration.Text = "Configuration";
+			// 
+			// chkSavePassword
+			// 
+			this.chkSavePassword.AutoSize = true;
+			this.chkSavePassword.Location = new System.Drawing.Point(225, 34);
+			this.chkSavePassword.Name = "chkSavePassword";
+			this.chkSavePassword.Size = new System.Drawing.Size(99, 17);
+			this.chkSavePassword.TabIndex = 4;
+			this.chkSavePassword.Text = "Save password";
+			this.chkSavePassword.UseVisualStyleBackColor = true;
 			// 
 			// label8
 			// 
@@ -266,16 +276,6 @@
 			this.progCurrentFile.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this.progCurrentFile.TabIndex = 7;
 			// 
-			// chkSavePassword
-			// 
-			this.chkSavePassword.AutoSize = true;
-			this.chkSavePassword.Location = new System.Drawing.Point(225, 34);
-			this.chkSavePassword.Name = "chkSavePassword";
-			this.chkSavePassword.Size = new System.Drawing.Size(99, 17);
-			this.chkSavePassword.TabIndex = 4;
-			this.chkSavePassword.Text = "Save password";
-			this.chkSavePassword.UseVisualStyleBackColor = true;
-			// 
 			// rtfMessages
 			// 
 			this.rtfMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -309,6 +309,7 @@
 			this.Name = "MainForm";
 			this.Text = "World of AI Package Downloader";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
 			this.grpConfiguration.ResumeLayout(false);
 			this.grpConfiguration.PerformLayout();

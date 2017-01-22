@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -31,9 +28,13 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			try {
 				string path = GetConfigPath();
 				FileInfo fi = new FileInfo(path);
-				if (!fi.Directory.Exists) fi.Directory.Create();
+				if (!fi.Directory.Exists) {
+					fi.Directory.Create();
+				}
 				XmlSerializer serializer = new XmlSerializer(typeof(Config));
-				using (StreamWriter sw = new StreamWriter(path)) serializer.Serialize(sw, this);
+				using (StreamWriter sw = new StreamWriter(path)) {
+					serializer.Serialize(sw, this);
+				}
 			}
 			catch { }
 		}
@@ -41,7 +42,10 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 		public static Config Load()
 		{
 			string path = GetConfigPath();
-			if (!File.Exists(path)) return new Config();
+			if (!File.Exists(path)) {
+				return new Config();
+			}
+
 			try {
 				XmlSerializer serializer = new XmlSerializer(typeof(Config));
 				using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read)) {

@@ -27,8 +27,8 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			new PackageGroup("ceased", "Airlines No Longer Operating")
 		};
 		private Dictionary<string, Dictionary<string, List<PackageInfo>>> mPackages;
-		private WebClient mPackageListClient;
-		private CookieAwareWebClient mPackageDownloadClient;
+		private WebClient mPackageListClient = new WebClient();
+		private CookieAwareWebClient mPackageDownloadClient = new CookieAwareWebClient();
 		private bool mDownloadInProgress;
 		private List<PackageInfo> mSelectedPackages;
 		private int mCurrentPackageIndex;
@@ -36,22 +36,29 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 		public MainForm()
 		{
 			InitializeComponent();
-			mPackageListClient = new WebClient();
+		}
+
+		private void MainForm_Load(object sender, EventArgs e)
+		{
 			mPackageListClient.DownloadProgressChanged += mPackageListClient_DownloadProgressChanged;
 			mPackageListClient.DownloadStringCompleted += mPackageListClient_DownloadStringCompleted;
-			mPackageDownloadClient = new CookieAwareWebClient();
 			mPackageDownloadClient.UploadValuesCompleted += mPackageDownloadClient_UploadValuesCompleted;
 			mPackageDownloadClient.DownloadStringCompleted += mPackageDownloadClient_DownloadStringCompleted;
 			mPackageDownloadClient.DownloadDataCompleted += mPackageDownloadClient_DownloadDataCompleted;
 			ddlSim.Items.Add("FS9");
 			ddlSim.Items.Add("FSX");
+			LoadConfig();
+			SetControlStates();
+		}
+
+		private void LoadConfig()
+		{
 			Config cfg = Config.Load();
 			txtAvsimUsername.Text = cfg.AvsimUsername;
 			txtAvsimPassword.Text = cfg.AvsimPassword;
 			chkSavePassword.Checked = cfg.SavePassword;
 			ddlSim.SelectedItem = cfg.Simulator;
 			txtDownloadFolder.Text = cfg.DownloadFolder;
-			SetControlStates();
 		}
 
 		private void SetControlStates()
@@ -95,7 +102,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 					string html = File.ReadAllText(LOCAL_PACKAGE_LIST_FILE);
 					AddMessage(" done." + Environment.NewLine);
 					ParsePackageList(html);
-					if (mPackages != null) PopulateTree();
+					if (mPackages != null) {
+						PopulateTree();
+					}
 				}
 				catch (Exception ex) {
 					MessageBox.Show(this, string.Format("Error loading local package file: {0}", ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -122,7 +131,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 
 		void mPackageListClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
 		{
-			if (e.Cancelled) return;
+			if (e.Cancelled) {
+				return;
+			}
 			if (e.Error != null) {
 				MessageBox.Show(this, string.Format("Error loading package list from WoAI web site: {0}{1}{2}{3}", e.Error.Message, Environment.NewLine, Environment.NewLine, e.Error.InnerException != null ? e.Error.InnerException.Message : ""), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				AddErrorMessage(" error." + Environment.NewLine);
@@ -132,7 +143,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			progFetchPackageList.Hide();
 			btnRefreshPackageList.Show();
 			ParsePackageList(e.Result);
-			if (mPackages != null) PopulateTree();
+			if (mPackages != null) {
+				PopulateTree();
+			}
 		}
 
 		private void ParsePackageList(string html)
@@ -145,15 +158,21 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				mPackages.Add(packageGroup.Name, new Dictionary<string, List<PackageInfo>>());
 				string query = string.Format("//a[@name='{0}']/following::table[1]", packageGroup.Anchor);
 				HtmlNode table = doc.DocumentNode.SelectSingleNode(query);
-				if (table == null) continue;
+				if (table == null) {
+					continue;
+				}
 				foreach (HtmlNode row in table.SelectNodes("tr")) {
 					HtmlNodeCollection cells = row.SelectNodes("td");
-					if (cells.Count != 6) continue;
+					if (cells.Count != 6) {
+						continue;
+					}
 					PackageInfo pi = new PackageInfo() {
 						Name = cells[1].InnerText.Trim(),
 						Country = cells[2].InnerText.Trim()
 					};
-					if (string.IsNullOrEmpty(pi.Country)) pi.Country = "N/A";
+					if (string.IsNullOrEmpty(pi.Country)) {
+						pi.Country = "N/A";
+					}
 					HtmlNodeCollection links = cells[5].SelectNodes("a");
 					if (links.Count == 2) {
 						pi.AvsimUrlFs9 = links[0].Attributes["href"].Value;
@@ -162,7 +181,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 						pi.AvsimUrlFs9 = links[0].Attributes["href"].Value;
 						pi.AvsimUrlFsx = links[2].Attributes["href"].Value;
 					}
-					if (!mPackages[packageGroup.Name].ContainsKey(pi.Country)) mPackages[packageGroup.Name].Add(pi.Country, new List<PackageInfo>());
+					if (!mPackages[packageGroup.Name].ContainsKey(pi.Country)) {
+						mPackages[packageGroup.Name].Add(pi.Country, new List<PackageInfo>());
+					}
 					mPackages[packageGroup.Name][pi.Country].Add(pi);
 				}
 			}
@@ -186,7 +207,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 
 		private void treePackages_AfterExpand(object sender, TreeViewEventArgs e)
 		{
-			if (e.Node.Parent != null) e.Node.Parent.Expand();
+			if (e.Node.Parent != null) {
+				e.Node.Parent.Expand();
+			}
 		}
 
 		private void treePackages_AfterCheck(object sender, TreeViewEventArgs e)
@@ -202,9 +225,12 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 		{
 			List<TreeNode> checkedNodes = new List<TreeNode>();
 			foreach (TreeNode node in nodes) {
-				if (node.Checked) checkedNodes.Add(node);
+				if (node.Checked) {
+					checkedNodes.Add(node);
+				}
 				checkedNodes.AddRange(GetCheckedNodes(node.Nodes));
 			}
+
 			return checkedNodes;
 		}
 
@@ -223,7 +249,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				CheckParentsWhereAllChildrenChecked(node.Nodes);
 				if (!node.Checked) allChecked = false;
 			}
-			if ((nodes.Count > 0) && (nodes[0].Parent != null)) nodes[0].Parent.Checked = allChecked;
+			if ((nodes.Count > 0) && (nodes[0].Parent != null)) {
+				nodes[0].Parent.Checked = allChecked;
+			}
 		}
 
 		private void btnBrowseDownloadFolder_Click(object sender, EventArgs e)
@@ -233,14 +261,20 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			dlg.ShowNewFolderButton = true;
 			dlg.SelectedPath = txtDownloadFolder.Text;
 			DialogResult result = dlg.ShowDialog(this);
-			if (result == DialogResult.OK) txtDownloadFolder.Text = dlg.SelectedPath;
+			if (result == DialogResult.OK) {
+				txtDownloadFolder.Text = dlg.SelectedPath;
+			}
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			SaveConfig();
-			if (mPackageListClient != null) mPackageListClient.Dispose();
-			if (mPackageDownloadClient != null) mPackageDownloadClient.Dispose();
+			if (mPackageListClient != null) {
+				mPackageListClient.Dispose();
+			}
+			if (mPackageDownloadClient != null) {
+				mPackageDownloadClient.Dispose();
+			}
 		}
 
 		private void Credentials_TextChanged(object sender, EventArgs e)
@@ -287,7 +321,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 
 		private void StopDownload()
 		{
-			if (mPackageDownloadClient.IsBusy) mPackageDownloadClient.CancelAsync();
+			if (mPackageDownloadClient.IsBusy) {
+				mPackageDownloadClient.CancelAsync();
+			}
 			mDownloadInProgress = false;
 			SetControlStates();
 			progOverall.Value = 0;
@@ -305,7 +341,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 
 		void mPackageDownloadClient_UploadValuesCompleted(object sender, UploadValuesCompletedEventArgs e)
 		{
-			if (e.Cancelled) return;
+			if (e.Cancelled) {
+				return;
+			}
 			if (e.Error != null) {
 				AddErrorMessage(" error." + Environment.NewLine);
 				StopDownload();
@@ -316,7 +354,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			bool gotAuthCookie = false;
 			foreach (Cookie cookie in cookies) {
 				cookie.Path = "/";
-				if (cookie.Name == "LibraryLogin") gotAuthCookie = true;
+				if (cookie.Name == "LibraryLogin") {
+					gotAuthCookie = true;
+				}
 			}
 			mPackageDownloadClient.CookieContainer.Add(cookies);
 			if (!gotAuthCookie) {
@@ -345,7 +385,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 
 		void mPackageDownloadClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
 		{
-			if (e.Cancelled) return;
+			if (e.Cancelled) {
+				return;
+			}
 			if (e.Error != null) {
 				AddErrorMessage(" error." + Environment.NewLine);
 				StopDownload();
@@ -381,7 +423,9 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 		}
 
 		void mPackageDownloadClient_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e) {
-			if (e.Cancelled) return;
+			if (e.Cancelled) {
+				return;
+			}
 			if (e.Error != null) {
 				AddErrorMessage(" error." + Environment.NewLine);
 				StopDownload();
@@ -422,14 +466,20 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 
 		private void AddMessage(string message, Color color)
 		{
-			if (rtfMessages.IsDisposed || rtfMessages.Disposing) return;
-			if (string.IsNullOrEmpty(message)) return;
+			if (rtfMessages.IsDisposed || rtfMessages.Disposing) {
+				return;
+			}
+			if (string.IsNullOrEmpty(message)) {
+				return;
+			}
 			bool scrolledToBottom = rtfMessages.IsAtMaxScroll();
 			rtfMessages.SelectionStart = rtfMessages.TextLength;
 			rtfMessages.SelectionColor = color;
 			rtfMessages.SelectedText = message;
 			rtfMessages.SelectionStart = rtfMessages.TextLength;
-			if (scrolledToBottom) rtfMessages.ScrollToCaret();
+			if (scrolledToBottom) {
+				rtfMessages.ScrollToCaret();
+			}
 		}
 
 		private void SaveConfig()
