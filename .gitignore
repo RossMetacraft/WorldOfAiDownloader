@@ -1,0 +1,14 @@
+[Tt]humbs.db
+*.[Oo]bj
+*.user
+*.ncb
+*.suo
+*.[Cc]ache
+*.log
+*.sbr
+*.unsuccessfulbuild
+obj/
+[Bb]in/
+[Rr]elease*/
+.vs/
+packages/
