@@ -5,7 +5,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using HtmlAgilityPack;
@@ -15,7 +14,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 	public partial class MainForm : Form
 	{
 		private const string LOCAL_PACKAGE_LIST_FILE = "packages.html";
-		private const string WORLD_OF_AI_PACKAGE_LIST_URL = "http://www.world-of-ai.com/allpackages.php";
+		private const string WORLD_OF_AI_PACKAGE_LIST_URL = "https://www.world-of-ai.com/allpackages.php";
 		private const string AVSIM_LOGIN_URL = "https://library.avsim.net/dologin.php";
 		private const string AVSIM_DOWNLOAD_URL_FORMAT = "https://library.avsim.net/sendfile.php?Location=AVSIM&Proto=ftp&DLID={0}";
 
@@ -40,11 +39,11 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			mPackageListClient.DownloadProgressChanged += mPackageListClient_DownloadProgressChanged;
-			mPackageListClient.DownloadStringCompleted += mPackageListClient_DownloadStringCompleted;
-			mPackageDownloadClient.UploadValuesCompleted += mPackageDownloadClient_UploadValuesCompleted;
-			mPackageDownloadClient.DownloadStringCompleted += mPackageDownloadClient_DownloadStringCompleted;
-			mPackageDownloadClient.DownloadDataCompleted += mPackageDownloadClient_DownloadDataCompleted;
+			mPackageListClient.DownloadProgressChanged += PackageListClient_DownloadProgressChanged;
+			mPackageListClient.DownloadStringCompleted += PackageListClient_DownloadStringCompleted;
+			mPackageDownloadClient.UploadValuesCompleted += PackageDownloadClient_UploadValuesCompleted;
+			mPackageDownloadClient.DownloadStringCompleted += PackageDownloadClient_DownloadStringCompleted;
+			mPackageDownloadClient.DownloadDataCompleted += PackageDownloadClient_DownloadDataCompleted;
 			ddlSim.Items.Add("FS9");
 			ddlSim.Items.Add("FSX");
 			LoadConfig();
@@ -89,7 +88,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			FetchPackageList();
 		}
 
-		private void btnRefreshPackageList_Click(object sender, EventArgs e)
+		private void BtnRefreshPackageList_Click(object sender, EventArgs e)
 		{
 			FetchPackageList();
 		}
@@ -124,12 +123,12 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			}
 		}
 
-		void mPackageListClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+		void PackageListClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
 		{
 			progFetchPackageList.Value = e.ProgressPercentage;
 		}
 
-		void mPackageListClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+		void PackageListClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
 		{
 			if (e.Cancelled) {
 				return;
@@ -205,19 +204,19 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			}
 		}
 
-		private void treePackages_AfterExpand(object sender, TreeViewEventArgs e)
+		private void TreePackages_AfterExpand(object sender, TreeViewEventArgs e)
 		{
 			if (e.Node.Parent != null) {
 				e.Node.Parent.Expand();
 			}
 		}
 
-		private void treePackages_AfterCheck(object sender, TreeViewEventArgs e)
+		private void TreePackages_AfterCheck(object sender, TreeViewEventArgs e)
 		{
-			treePackages.AfterCheck -= new TreeViewEventHandler(treePackages_AfterCheck);
+			treePackages.AfterCheck -= new TreeViewEventHandler(TreePackages_AfterCheck);
 			CheckAllNodes(e.Node, e.Node.Checked);
 			CheckParentsWhereAllChildrenChecked(treePackages.Nodes);
-			treePackages.AfterCheck += new TreeViewEventHandler(treePackages_AfterCheck);
+			treePackages.AfterCheck += new TreeViewEventHandler(TreePackages_AfterCheck);
 			SetControlStates();
 		}
 
@@ -254,12 +253,14 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			}
 		}
 
-		private void btnBrowseDownloadFolder_Click(object sender, EventArgs e)
+		private void BtnBrowseDownloadFolder_Click(object sender, EventArgs e)
 		{
-			FolderBrowserDialog dlg = new FolderBrowserDialog();
-			dlg.Description = "Specify the folder where the package files will be saved:";
-			dlg.ShowNewFolderButton = true;
-			dlg.SelectedPath = txtDownloadFolder.Text;
+			FolderBrowserDialog dlg = new FolderBrowserDialog
+			{
+				Description = "Specify the folder where the package files will be saved:",
+				ShowNewFolderButton = true,
+				SelectedPath = txtDownloadFolder.Text
+			};
 			DialogResult result = dlg.ShowDialog(this);
 			if (result == DialogResult.OK) {
 				txtDownloadFolder.Text = dlg.SelectedPath;
@@ -282,7 +283,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			SetControlStates();
 		}
 
-		private void btnDownloadPackages_Click(object sender, EventArgs e)
+		private void BtnDownloadPackages_Click(object sender, EventArgs e)
 		{
 			if (mDownloadInProgress) {
 				StopDownload();
@@ -291,7 +292,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			}
 		}
 
-		private bool hasWriteAccessToFolder(string folderPath)
+		private bool HaveWriteAccessToFolder(string folderPath)
 		{
 			try {
 				// Attempt to get a list of security permissions from the folder. 
@@ -306,7 +307,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 
 		private void StartDownload()
 		{
-			if (!hasWriteAccessToFolder(txtDownloadFolder.Text)) {
+			if (!HaveWriteAccessToFolder(txtDownloadFolder.Text)) {
 				MessageBox.Show(this, "You do not appear to have write access to the specified download folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
 				return;
 			}
@@ -333,13 +334,15 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 		private void DoLogin()
 		{
 			AddMessage("Logging into AVSIM ...");
-			NameValueCollection form = new NameValueCollection();
-			form.Add("UserLogin", txtAvsimUsername.Text);
-			form.Add("Password", txtAvsimPassword.Text);
+			NameValueCollection form = new NameValueCollection
+			{
+				{ "UserLogin", txtAvsimUsername.Text },
+				{ "Password", txtAvsimPassword.Text }
+			};
 			mPackageDownloadClient.UploadValuesAsync(new Uri(AVSIM_LOGIN_URL), "POST", form);
 		}
 
-		void mPackageDownloadClient_UploadValuesCompleted(object sender, UploadValuesCompletedEventArgs e)
+		void PackageDownloadClient_UploadValuesCompleted(object sender, UploadValuesCompletedEventArgs e)
 		{
 			if (e.Cancelled) {
 				return;
@@ -383,7 +386,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			mPackageDownloadClient.DownloadStringAsync(new Uri(downloadUri));
 		}
 
-		void mPackageDownloadClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+		void PackageDownloadClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
 		{
 			if (e.Cancelled) {
 				return;
@@ -422,7 +425,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			mPackageDownloadClient.DownloadDataAsync(new Uri(downloadUrl));
 		}
 
-		void mPackageDownloadClient_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e) {
+		void PackageDownloadClient_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e) {
 			if (e.Cancelled) {
 				return;
 			}

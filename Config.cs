@@ -49,8 +49,10 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			try {
 				XmlSerializer serializer = new XmlSerializer(typeof(Config));
 				using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read)) {
-					XmlTextReader reader = new XmlTextReader(fs);
-					reader.Normalization = false;
+					XmlTextReader reader = new XmlTextReader(fs)
+					{
+						Normalization = false
+					};
 					return (Config)serializer.Deserialize(reader);
 				}
 			}

@@ -62,7 +62,7 @@
 			this.btnRefreshPackageList.TabIndex = 3;
 			this.btnRefreshPackageList.Text = "Refresh Package List";
 			this.btnRefreshPackageList.UseVisualStyleBackColor = true;
-			this.btnRefreshPackageList.Click += new System.EventHandler(this.btnRefreshPackageList_Click);
+			this.btnRefreshPackageList.Click += new System.EventHandler(this.BtnRefreshPackageList_Click);
 			// 
 			// treePackages
 			// 
@@ -74,8 +74,8 @@
 			this.treePackages.Name = "treePackages";
 			this.treePackages.Size = new System.Drawing.Size(262, 449);
 			this.treePackages.TabIndex = 2;
-			this.treePackages.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treePackages_AfterCheck);
-			this.treePackages.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.treePackages_AfterExpand);
+			this.treePackages.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TreePackages_AfterCheck);
+			this.treePackages.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.TreePackages_AfterExpand);
 			// 
 			// txtAvsimUsername
 			// 
@@ -143,7 +143,7 @@
 			this.btnBrowseDownloadFolder.TabIndex = 9;
 			this.btnBrowseDownloadFolder.Text = "Browse";
 			this.btnBrowseDownloadFolder.UseVisualStyleBackColor = true;
-			this.btnBrowseDownloadFolder.Click += new System.EventHandler(this.btnBrowseDownloadFolder_Click);
+			this.btnBrowseDownloadFolder.Click += new System.EventHandler(this.BtnBrowseDownloadFolder_Click);
 			// 
 			// txtDownloadFolder
 			// 
@@ -222,7 +222,7 @@
 			this.btnDownloadPackages.TabIndex = 10;
 			this.btnDownloadPackages.Text = "Download Selected Packages";
 			this.btnDownloadPackages.UseVisualStyleBackColor = true;
-			this.btnDownloadPackages.Click += new System.EventHandler(this.btnDownloadPackages_Click);
+			this.btnDownloadPackages.Click += new System.EventHandler(this.BtnDownloadPackages_Click);
 			// 
 			// label5
 			// 

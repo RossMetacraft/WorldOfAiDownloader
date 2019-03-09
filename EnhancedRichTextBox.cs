@@ -15,17 +15,15 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 		private static extern bool GetScrollRange(IntPtr hWnd, int nBar, out int lpMinPos, out int lpMaxPos);
 
 		[DllImport("user32.dll")]
-		private static extern IntPtr SendMessage(IntPtr hWnd, Int32 wMsg, Int32 wParam, ref Point lParam);
+		private static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, ref Point lParam);
 
 		public bool IsAtMaxScroll()
 		{
-			int minScroll;
-			int maxScroll;
-			GetScrollRange(this.Handle, SB_VERT, out minScroll, out maxScroll);
+			GetScrollRange(Handle, SB_VERT, out int minScroll, out int maxScroll);
 			Point rtfPoint = Point.Empty;
-			SendMessage(this.Handle, EM_GETSCROLLPOS, 0, ref rtfPoint);
+			SendMessage(Handle, EM_GETSCROLLPOS, 0, ref rtfPoint);
 
-			return (rtfPoint.Y + this.ClientSize.Height >= maxScroll);
+			return (rtfPoint.Y + ClientSize.Height >= maxScroll);
 		}
 	}
 }
