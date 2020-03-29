@@ -17,7 +17,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			var request = base.GetWebRequest(address);
 			if (request is HttpWebRequest) {
 				(request as HttpWebRequest).CookieContainer = CookieContainer;
-				(request as HttpWebRequest).AllowAutoRedirect = false;
+				(request as HttpWebRequest).AllowAutoRedirect = true;
 			}
 
 			return request;
