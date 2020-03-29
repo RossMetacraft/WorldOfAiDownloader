@@ -436,7 +436,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				return;
 			}
 			string filenameHeader = mPackageDownloadClient.ResponseHeaders["Content-Disposition"] ?? string.Empty;
-			Match match = Regex.Match(filenameHeader, "filename=\"(.+?)\"", RegexOptions.IgnoreCase);
+			Match match = Regex.Match(filenameHeader, "filename=(.+)", RegexOptions.IgnoreCase);
 			if (!match.Success) {
 				AddErrorMessage(" filename not found in response headers." + Environment.NewLine);
 				DownloadNextPackage();
