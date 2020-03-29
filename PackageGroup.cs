@@ -2,8 +2,8 @@
 {
 	internal class PackageGroup
 	{
-		public string Anchor { get; private set; }
-		public string Name { get; private set; }
+		public string Anchor { get; }
+		public string Name { get; }
 
 		public PackageGroup(string anchor, string name)
 		{

@@ -18,7 +18,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 		private const string AVSIM_LOGIN_URL = "https://library.avsim.net/dologin.php";
 		private const string AVSIM_DOWNLOAD_URL_FORMAT = "https://library.avsim.net/sendfile.php?Location=AVSIM&Proto=ftp&DLID={0}";
 
-		private List<PackageGroup> mPackageGroups = new List<PackageGroup>() {
+		private readonly List<PackageGroup> mPackageGroups = new List<PackageGroup>() {
 			new PackageGroup("airlines", "Passenger Airlines"),
 			new PackageGroup("cargo", "Cargo Airlines"),
 			new PackageGroup("ga", "General Aviation"),
@@ -26,8 +26,8 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 			new PackageGroup("ceased", "Airlines No Longer Operating")
 		};
 		private Dictionary<string, Dictionary<string, List<PackageInfo>>> mPackages;
-		private WebClient mPackageListClient = new WebClient();
-		private CookieAwareWebClient mPackageDownloadClient = new CookieAwareWebClient();
+		private readonly WebClient mPackageListClient = new WebClient();
+		private readonly CookieAwareWebClient mPackageDownloadClient = new CookieAwareWebClient();
 		private bool mDownloadInProgress;
 		private List<PackageInfo> mSelectedPackages;
 		private int mCurrentPackageIndex;

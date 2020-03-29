@@ -5,7 +5,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 {
 	public class CookieAwareWebClient : WebClient
 	{
-		public CookieContainer CookieContainer { get; private set; }
+		public CookieContainer CookieContainer { get; }
 
 		public CookieAwareWebClient()
 		{

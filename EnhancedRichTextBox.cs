@@ -19,7 +19,7 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 
 		public bool IsAtMaxScroll()
 		{
-			GetScrollRange(Handle, SB_VERT, out int minScroll, out int maxScroll);
+			GetScrollRange(Handle, SB_VERT, out int _, out int maxScroll);
 			Point rtfPoint = Point.Empty;
 			SendMessage(Handle, EM_GETSCROLLPOS, 0, ref rtfPoint);
 
