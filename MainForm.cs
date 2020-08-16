@@ -162,17 +162,17 @@ namespace Metacraft.FlightSimulation.WoaiDownloader
 				}
 				foreach (HtmlNode row in table.SelectNodes("tr")) {
 					HtmlNodeCollection cells = row.SelectNodes("td");
-					if (cells.Count != 6) {
+					if (cells.Count != 5) {
 						continue;
 					}
 					PackageInfo pi = new PackageInfo() {
-						Name = cells[1].InnerText.Trim(),
-						Country = cells[2].InnerText.Trim()
+						Name = cells[0].InnerText.Trim(),
+						Country = cells[1].InnerText.Trim()
 					};
 					if (string.IsNullOrEmpty(pi.Country)) {
 						pi.Country = "N/A";
 					}
-					HtmlNodeCollection links = cells[5].SelectNodes("a");
+					HtmlNodeCollection links = cells[4].SelectNodes("a");
 					if (links.Count == 2) {
 						pi.AvsimUrlFs9 = links[0].Attributes["href"].Value;
 						pi.AvsimUrlFsx = pi.AvsimUrlFs9;
