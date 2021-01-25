@@ -3,7 +3,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Metacraft.FlightSimulation.WoaiDownloader
+namespace RossCarlson.FlightSimulation.WoaiDownloader
 {
 	[Serializable]
 	public class Config

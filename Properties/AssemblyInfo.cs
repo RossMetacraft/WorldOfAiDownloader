@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Metacraft.FlightSimulation.WoaiDownloader")]
+[assembly: AssemblyTitle("RossCarlson.FlightSimulation.WoaiDownloader")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Metacraft.FlightSimulation.WoaiDownloader")]
-[assembly: AssemblyCopyright("Copyright © 2015 Metacraft")]
+[assembly: AssemblyProduct("RossCarlson.FlightSimulation.WoaiDownloader")]
+[assembly: AssemblyCopyright("Copyright © 2015 Ross Alan Carlson")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

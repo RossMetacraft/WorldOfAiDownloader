@@ -1,7 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metacraft.FlightSimulation.WoaiDownloader", "Metacraft.FlightSimulation.WoaiDownloader.csproj", "{03482919-E282-437A-9414-878409842E16}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RossCarlson.FlightSimulation.WoaiDownloader", "RossCarlson.FlightSimulation.WoaiDownloader.csproj", "{03482919-E282-437A-9414-878409842E16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,5 +18,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E433A4C4-6E61-4276-8F39-A4FA83F6E295}
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,4 @@
-﻿namespace Metacraft.FlightSimulation.WoaiDownloader
+﻿namespace RossCarlson.FlightSimulation.WoaiDownloader
 {
 	internal class PackageGroup
 	{

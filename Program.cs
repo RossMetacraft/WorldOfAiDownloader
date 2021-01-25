@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Metacraft.FlightSimulation.WoaiDownloader
+namespace RossCarlson.FlightSimulation.WoaiDownloader
 {
 	static class Program
 	{

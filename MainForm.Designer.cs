@@ -1,4 +1,4 @@
-﻿namespace Metacraft.FlightSimulation.WoaiDownloader
+﻿namespace RossCarlson.FlightSimulation.WoaiDownloader
 {
 	partial class MainForm
 	{
@@ -49,7 +49,7 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.progCurrentFile = new System.Windows.Forms.ProgressBar();
-			this.rtfMessages = new Metacraft.FlightSimulation.WoaiDownloader.EnhancedRichTextBox();
+			this.rtfMessages = new RossCarlson.FlightSimulation.WoaiDownloader.EnhancedRichTextBox();
 			this.grpConfiguration.SuspendLayout();
 			this.SuspendLayout();
 			// 

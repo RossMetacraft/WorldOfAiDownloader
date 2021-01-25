@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Metacraft.FlightSimulation.WoaiDownloader
+namespace RossCarlson.FlightSimulation.WoaiDownloader
 {
 	public class EnhancedRichTextBox : RichTextBox
 	{

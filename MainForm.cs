@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using HtmlAgilityPack;
 
-namespace Metacraft.FlightSimulation.WoaiDownloader
+namespace RossCarlson.FlightSimulation.WoaiDownloader
 {
 	public partial class MainForm : Form
 	{

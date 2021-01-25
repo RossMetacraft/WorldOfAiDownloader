@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Metacraft.FlightSimulation.WoaiDownloader
+namespace RossCarlson.FlightSimulation.WoaiDownloader
 {
 	public class CookieAwareWebClient : WebClient
 	{
